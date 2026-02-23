@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>EcoScan - Smart Waste Sorter</title>
+  
+  <!-- PWA Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="EcoScan">
+  <meta name="theme-color" content="#020617">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3299/3299935.png">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+    // Mock process.env for browser environment
+    window.process = {
+      env: {
+        API_KEY: "" // This will be populated by your hosting provider or manually for local testing
+      }
+    };
+  </script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #020617;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+    #root {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .safe-top { padding-top: env(safe-area-inset-top); }
+    .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="index.tsx"></script>
+</body>
+</html>
