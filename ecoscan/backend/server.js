@@ -9,13 +9,19 @@ import express from 'express';
 import { GoogleAuth } from 'google-auth-library';
 import fetch from 'node-fetch';
 import rateLimit from 'express-rate-limit';
+import { existsSync } from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 
 const app = express();
 app.use(express.json({limit: process?.env?.API_PAYLOAD_MAX_SIZE || "7mb"}));
 
-const PORT = process?.env?.API_BACKEND_PORT || 5000;
-const API_BACKEND_HOST = process?.env?.API_BACKEND_HOST || "127.0.0.1";
+const PORT = process?.env?.API_BACKEND_PORT || process?.env?.PORT || 8080;
+const API_BACKEND_HOST = process?.env?.API_BACKEND_HOST || '0.0.0.0';
 const GOOGLE_CLOUD_LOCATION = process?.env?.GOOGLE_CLOUD_LOCATION;
 const GOOGLE_CLOUD_PROJECT = process?.env?.GOOGLE_CLOUD_PROJECT;
 
@@ -303,6 +309,23 @@ app.post('/api-proxy', async (req, res) => {
     res.status(500).json({ error: error });
   }
 });
+
+// Rate limiter for static file serving
+const staticLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 300,
+    standardHeaders: true,
+    legacyHeaders: false,
+});
+
+// Serve static frontend files in production
+const publicPath = path.join(__dirname, 'public');
+if (existsSync(publicPath)) {
+  app.use(express.static(publicPath));
+  app.get('*', staticLimiter, (req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
+  });
+}
 
 const server = app.listen(PORT, API_BACKEND_HOST, () => {
   console.log(`Vertex AI Backend listening at http://localhost:${PORT}`);
