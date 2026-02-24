@@ -2,6 +2,7 @@
 {
   "name": "EcoScan",
   "description": "A high-performance, AI-powered waste sorting assistant. Uses Gemini 2.5 Flash to identify rubbish via camera and provide instant recycling guidance based on local bin rules. Built with React, Tailwind CSS, and Framer Motion.",
+  "url": "https://github.com/mr329/ecoscan",
   "requestFramePermissions": [
     "camera"
   ]
